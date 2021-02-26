@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.activities.MainActivity">
+
+    <item
+        android:id="@+id/action_pick_day"
+        android:icon="@drawable/ic_today_24dp"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_pick_day"
+        app:showAsAction="ifRoom"
+        tools:ignore="AppCompatResource" />
+
+    <item
+        android:id="@+id/action_download_hd"
+        android:title="@string/action_download_hd"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_share"
+        android:title="@string/action_share"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_about"
+        android:title="@string/action_about"
+        app:showAsAction="never" />
+
+</menu>

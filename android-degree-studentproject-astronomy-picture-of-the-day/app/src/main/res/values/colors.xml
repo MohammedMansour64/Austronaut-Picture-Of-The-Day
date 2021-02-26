@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Main Colors -->
+    <color name="primary">@color/background_transparent_black</color>
+    <color name="primary_dark">@color/background_transparent_black</color>
+    <color name="accent">#FFEB3B</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#CCCCCC</color>
+
+    <!-- Dark transparent color -->
+    <color name="background_transparent_black">#77000000</color>
+
+
+
+</resources>

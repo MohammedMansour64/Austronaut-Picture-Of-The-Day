@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Some common space sizes to use in the layout-->
+    <dimen name="very_small_space">4dp</dimen>
+    <dimen name="small_space">8dp</dimen>
+    <dimen name="medium_space">12dp</dimen>
+    <dimen name="large_space">16dp</dimen>
+    <dimen name="very_large_space">32dp</dimen>
+
+</resources>

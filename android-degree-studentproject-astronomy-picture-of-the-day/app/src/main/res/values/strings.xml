@@ -1,0 +1,30 @@
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- App name -->
+    <string name="app_name">Astronomy Picture Of The Day</string>
+
+    <!-- Main Activity Title -->
+    <string name="title_main_activity">Astronomy Picture</string>
+
+    <!-- Main Menu Items -->
+    <string name="action_pick_day">Pick a date</string>
+    <string name="action_download_hd">Download Image</string>
+    <string name="action_share">Share</string>
+    <string name="action_about">About</string>
+
+    <!-- Permissions Messages -->
+    <string name="error_permissions_download_failed">Can\'t download the image!</string>
+    <string name="error_permissions_share_failed">Can\'t share the content!</string>
+
+    <!-- About Screen -->
+    <string name="about_label">About</string>
+    <string name="about_content">This application shows you appealing imagery from the universe with associated metadata and description every day.
+        This app uses official Apod API from <a href="https://api.nasa.gov/api.html#apod">NASA</a> but it\'s not the official NASA app.
+
+</string>
+    <!-- Share -->
+    <string name="share">Share</string>
+
+    <string name="apikey">YRLtBTu1hzCe6pCGMjHfSbQ2t1rapMM1xOF2Eobm</string>
+
+</resources>

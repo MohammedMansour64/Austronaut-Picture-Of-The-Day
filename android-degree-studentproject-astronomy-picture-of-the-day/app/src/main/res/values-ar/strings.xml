@@ -1,0 +1,30 @@
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- App name -->
+    <string name="app_name">صورة من الفضاء هذا اليوم</string>
+
+    <!-- Main Activity Title -->
+    <string name="title_main_activity">صورة من الفضاء</string>
+
+    <!-- Main Menu Items -->
+    <string name="action_pick_day">اختر التاريخ</string>
+    <string name="action_download_hd">تحميل بجودة عالية</string>
+    <string name="action_share">مشاركة</string>
+    <string name="action_about">عن التطبيق</string>
+
+    <!-- Permissions Messages -->
+    <string name="error_permissions_download_failed">فشل تحميل الصورة بسبب عدم الحصول على الأذونات اللازمة!</string>
+    <string name="error_permissions_share_failed">فشلت عملية المشاركة بسبب عدم الحصول على الأذونات اللازمة!</string>
+
+    <!-- About Screen -->
+    <string name="about_label">عن التطبيق</string>
+    <string name="about_content">هذا التطبيق يظهر لك  صورة جديدة من الفضاء كل يوم مع وصف الصورة ومعلومات عنها، من خلال هذا التطبيق يمكنك مشاهدة أروع الصورة التي تم التقاطها على مدار السنوات السابقة.
+        يستخدم هذا التطبيق موقع <a href="https://api.nasa.gov/api.html#apod">ناسا</a> للحصول على الصور ولكن التطبيق غير تابع لوكالة ناسا بشكل رسمي.
+    </string>
+
+    <!-- Share -->
+    <string name="share">مشاركة</string>
+
+    <string name="apikey">YRLtBTu1hzCe6pCGMjHfSbQ2t1rapMM1xOF2Eobm</string>
+
+</resources>
