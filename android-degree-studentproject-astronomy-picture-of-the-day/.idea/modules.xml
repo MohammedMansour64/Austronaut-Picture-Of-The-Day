@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/android-degree-studentproject-astronomy-picture-of-the-day.iml" filepath="$PROJECT_DIR$/.idea/android-degree-studentproject-astronomy-picture-of-the-day.iml" group="android-degree-studentproject-astronomy-picture-of-the-day" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="android-degree-studentproject-astronomy-picture-of-the-day/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/android-degree-studentproject-astronomy-picture-of-the-day.iml" filepath="$PROJECT_DIR$/.idea/android-degree-studentproject-astronomy-picture-of-the-day.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/android-degree-studentproject-astronomy-picture-of-the-day.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/android-degree-studentproject-astronomy-picture-of-the-day.app.iml" />
     </modules>
   </component>
 </project>
