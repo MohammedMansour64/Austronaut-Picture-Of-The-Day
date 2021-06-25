@@ -15,6 +15,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.PersistableBundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,6 +24,7 @@ import android.webkit.WebView;
 import android.widget.DatePicker;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.barmej.apod.APOD.APODInformation;
 import com.barmej.apod.APOD.APODParser;
@@ -39,8 +41,9 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.concurrent.ExecutionException;
 
-public class MainActivity extends AppCompatActivity
-{
+import static com.barmej.apod.Constants.apodInformation;
+
+public class MainActivity extends AppCompatActivity {
 
     private static final int STORAGE_PERMISSION_CODE = 101;
 
@@ -61,8 +64,7 @@ public class MainActivity extends AppCompatActivity
     private Uri uri;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -89,9 +91,18 @@ public class MainActivity extends AppCompatActivity
                     new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE} , STORAGE_PERMISSION_CODE);
         }
 
-
         applyData();
 
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu (Menu menu) {
+        if (apodInformation.getMedia_typeInformation().equals("video")) {
+            menu.getItem(1).setEnabled(false);
+        } else if (apodInformation.getMedia_typeInformation().equals("image")){
+            menu.getItem(1).setEnabled(true);
+        }
+        return true;
     }
 
     // menu options create
@@ -100,6 +111,7 @@ public class MainActivity extends AppCompatActivity
     {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu, menu);
+
         return true;
     }
     // action for every option in the list
@@ -150,7 +162,7 @@ public class MainActivity extends AppCompatActivity
     // obvious name
     public void download()
     {
-        APODInformation downloadInformation = Constants.apodInformation;
+        APODInformation downloadInformation = apodInformation;
         if (downloadInformation.getMedia_typeInformation().equals("image")){
             // Create request for android download manager
             DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
@@ -168,6 +180,8 @@ public class MainActivity extends AppCompatActivity
             request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "downloadfileName");
             request.setMimeType("image/*");
             downloadManager.enqueue(request);
+        }else{
+            Toast.makeText(this, "False!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -232,4 +246,18 @@ public class MainActivity extends AppCompatActivity
             startActivity(Intent.createChooser(intent , "Share image via"));
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        BitmapView bitmapView = new BitmapView();
+        Bitmap bitmap = bitmapView.getBitmapFromView(image);
+        outState.putParcelable("image", bitmap);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Bitmap bitmap = savedInstanceState.getParcelable("image");
+        image.setImageBitmap(bitmap);
+    }
 }
