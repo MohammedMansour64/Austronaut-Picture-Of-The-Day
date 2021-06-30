@@ -1,5 +1,6 @@
 package com.barmej.apod.Activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -19,20 +20,21 @@ import android.os.PersistableBundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.DatePicker;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.barmej.apod.APOD.APODInformation;
-import com.barmej.apod.APOD.APODParser;
 import com.barmej.apod.Constants;
 import com.barmej.apod.Network.NetworkThread;
 import com.barmej.apod.R;
 import com.barmej.apod.Tools.BitmapView;
+import com.bumptech.glide.Glide;
 import com.ortiz.touchview.TouchImageView;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -83,13 +85,7 @@ public class MainActivity extends AppCompatActivity {
         mMonth = c.get(Calendar.MONTH); // current month
         mDay = c.get(Calendar.DAY_OF_MONTH); //current Day.
 
-        // to request write data permission.
-        if (ContextCompat.checkSelfPermission(MainActivity.this , Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED){
 
-            ActivityCompat.requestPermissions(MainActivity.this ,
-                    new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE} , STORAGE_PERMISSION_CODE);
-        }
 
         applyData();
 
@@ -118,22 +114,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        switch (item.getItemId())
-        {
-            case R.id.action_pick_day:
-                datePicker();
-                break;
-            case R.id.action_download_hd:
-                download();
-                break;
-            case R.id.action_about:
-                Intent intent = new Intent(MainActivity.this, aboutActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.action_share:
-                backgroundTask backgroundTask = new backgroundTask();
-                backgroundTask.start();
-                break;
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_pick_day) {
+            datePicker();
+        } else if (itemId == R.id.action_download_hd) {
+            download();
+        } else if (itemId == R.id.action_about) {
+            Intent intent = new Intent(MainActivity.this, AboutActivity.class);
+            startActivity(intent);
+        } else if (itemId == R.id.action_share) {
+            BackgroundTask backgroundTask = new BackgroundTask();
+            backgroundTask.start();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -150,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
                 mMonth = month;
                 mDay = dayOfMonth;
 
+
                 theLovedDateFormat = year + "-" + (month + 1) + "-" + dayOfMonth;
                 Constants.currentDate = theLovedDateFormat;
                 applyData();
@@ -159,11 +151,20 @@ public class MainActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
+
+
     // obvious name
     public void download()
     {
-        APODInformation downloadInformation = apodInformation;
-        if (downloadInformation.getMedia_typeInformation().equals("image")){
+        // to request write data permission.
+        if (ContextCompat.checkSelfPermission(MainActivity.this , Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED){
+
+            ActivityCompat.requestPermissions(MainActivity.this ,
+                    new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE} , STORAGE_PERMISSION_CODE);
+        } else {
+            System.out.println("RESULT OK!");
+            APODInformation downloadInformation = apodInformation;
             // Create request for android download manager
             DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
             DownloadManager.Request request = new DownloadManager.Request(Uri.parse(downloadInformation.getHdUrlInformation()));
@@ -180,8 +181,30 @@ public class MainActivity extends AppCompatActivity {
             request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "downloadfileName");
             request.setMimeType("image/*");
             downloadManager.enqueue(request);
-        }else{
-            Toast.makeText(this, "False!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == STORAGE_PERMISSION_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            APODInformation downloadInformation = apodInformation;
+            // Create request for android download manager
+            DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(downloadInformation.getHdUrlInformation()));
+            request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
+
+            // set title and description
+            request.setTitle("Astronomy Picture of the day");
+            request.setDescription("Downloading Image...");
+
+            request.allowScanningByMediaScanner();
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+
+            //set the local destination for download file to a path within the application's external files directory
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "downloadfileName");
+            request.setMimeType("image/*");
+            downloadManager.enqueue(request);
         }
     }
 
@@ -191,7 +214,25 @@ public class MainActivity extends AppCompatActivity {
         networkThread.execute();
         try {
             if (networkThread.get() != null){
-                APODParser.apply(title , description , image ,webView ,progressBar , MainActivity.this);
+                APODInformation data = apodInformation;
+                title.setText(data.getTitleInformation());
+                description.setText(data.getDescriptionInformation());
+
+                if (data.getMedia_typeInformation().equals("image")){
+                    image.setVisibility(View.VISIBLE);
+
+                    // i use glide and picasso for double speed
+                    Glide.with(this).load(data.getUrlInformation()).thumbnail(0.005f).into(image);
+                    Picasso.with(this).load(apodInformation.getUrlInformation()).error(R.drawable.ic_launcher_background).into(image);
+                    webView.setVisibility(View.GONE);
+                    webView.loadData("", "text/html", null);
+
+                } else {
+                    image.setVisibility(View.GONE);
+                    webView.loadUrl(apodInformation.getUrlInformation());
+                    webView.setVisibility(View.VISIBLE);
+                }
+
             }
         } catch (ExecutionException e) {
             e.printStackTrace();
@@ -201,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // for sharing photo using background thread.
-     class backgroundTask extends Thread
+     class BackgroundTask extends Thread
      {
         @Override
         public void run() {
@@ -222,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
                     bitmap.compress(Bitmap.CompressFormat.PNG , 100 , fOut);
                     fOut.flush();
                     fOut.close();
-                    uri = FileProvider.getUriForFile(MainActivity.this , "com.barmej.apod" , file);
+                    uri = FileProvider.getUriForFile(MainActivity.this , getPackageName()  , file);
                     share();
 
                 } catch (FileNotFoundException e) {

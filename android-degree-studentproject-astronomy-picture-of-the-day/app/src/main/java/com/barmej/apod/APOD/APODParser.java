@@ -28,57 +28,20 @@ public class APODParser {
     public static APODInformation saveData(String httpResponse) throws JSONException {
         APODInformation apodInformation = new APODInformation();
         JSONObject jsonObject = new JSONObject(httpResponse);
-        if (jsonObject.getString(APOD_MEDIA_TYPE).equals("video")){
-                apodInformation.setMedia_typeInformation(jsonObject.getString(APOD_MEDIA_TYPE));
-                apodInformation.setDateInformation(jsonObject.getString(APOD_DATE));
-                apodInformation.setUrlInformation(jsonObject.getString(APOD_URL));
-                apodInformation.setDescriptionInformation(jsonObject.getString(APOD_EXPLANATION));
-                apodInformation.setService_versionInformation(jsonObject.getString(APOD_VERSION));
-                apodInformation.setTitleInformation(jsonObject.getString(APOD_TITLE));
-                apodInformation.setService_versionInformation(jsonObject.getString(APOD_VERSION));
-        }else {
-            apodInformation.setMedia_typeInformation(jsonObject.getString(APOD_MEDIA_TYPE));
-            apodInformation.setDateInformation(jsonObject.getString(APOD_DATE));
-            apodInformation.setUrlInformation(jsonObject.getString(APOD_URL));
-            apodInformation.setDescriptionInformation(jsonObject.getString(APOD_EXPLANATION));
-            apodInformation.setService_versionInformation(jsonObject.getString(APOD_VERSION));
-            apodInformation.setTitleInformation(jsonObject.getString(APOD_TITLE));
-            apodInformation.setService_versionInformation(jsonObject.getString(APOD_VERSION));
+
+        apodInformation.setMedia_typeInformation(jsonObject.getString(APOD_MEDIA_TYPE));
+        apodInformation.setDateInformation(jsonObject.getString(APOD_DATE));
+        apodInformation.setUrlInformation(jsonObject.getString(APOD_URL));
+        apodInformation.setDescriptionInformation(jsonObject.getString(APOD_EXPLANATION));
+        apodInformation.setService_versionInformation(jsonObject.getString(APOD_VERSION));
+        apodInformation.setTitleInformation(jsonObject.getString(APOD_TITLE));
+        apodInformation.setService_versionInformation(jsonObject.getString(APOD_VERSION));
+
+        if (jsonObject.getString(APOD_MEDIA_TYPE).equals("image")){
             apodInformation.setHdUrlInformation(jsonObject.getString(APOD_HDURL));
         }
 
         return apodInformation;
-    }
-
-    public static void apply(TextView title, TextView description, TouchImageView imageView, WebView webview, ProgressBar progressBar, Context context){
-        APODInformation apodInformation = Constants.apodInformation;
-        System.out.println("APODParser"+apodInformation.getTitleInformation());
-        progressBar.setVisibility(View.VISIBLE);
-        if (Constants.apodInformation != null){
-                title.setText(apodInformation.getTitleInformation());
-                description.setText(apodInformation.getDescriptionInformation());
-
-                if (apodInformation.getMedia_typeInformation().equals("image")){
-                    imageView.setVisibility(View.VISIBLE);
-
-                    // i use glide and picasso for double speed
-                    Glide.with(context).load(apodInformation.getUrlInformation()).thumbnail(0.005f).into(imageView);
-                    Picasso.with(context).load(apodInformation.getUrlInformation()).error(R.drawable.ic_launcher_background).into(imageView);
-                    webview.setVisibility(View.GONE);
-                    webview.loadData("", "text/html", null);
-                    progressBar.setVisibility(View.GONE);
-
-                } else {
-                    imageView.setVisibility(View.GONE);
-                    webview.loadUrl(apodInformation.getUrlInformation());
-                    webview.setVisibility(View.VISIBLE);
-                    progressBar.setVisibility(View.GONE);
-
-                }
-
-        }else{
-            Toast.makeText(context, "Hi", Toast.LENGTH_SHORT).show();
-        }
     }
 
 }

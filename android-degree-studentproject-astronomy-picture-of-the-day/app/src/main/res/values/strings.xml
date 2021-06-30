@@ -26,5 +26,6 @@
     <string name="share">Share</string>
 
     <string name="apikey">YRLtBTu1hzCe6pCGMjHfSbQ2t1rapMM1xOF2Eobm</string>
+    <string name="data_missing">Missing Data!</string>
 
 </resources>
