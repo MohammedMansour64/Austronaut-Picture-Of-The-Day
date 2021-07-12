@@ -32,7 +32,6 @@ import com.barmej.apod.Constants;
 import com.barmej.apod.Network.NetworkThread;
 import com.barmej.apod.R;
 import com.barmej.apod.Tools.BitmapView;
-import com.bumptech.glide.Glide;
 import com.ortiz.touchview.TouchImageView;
 import com.squareup.picasso.Picasso;
 
@@ -123,8 +122,13 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, AboutActivity.class);
             startActivity(intent);
         } else if (itemId == R.id.action_share) {
-            BackgroundTask backgroundTask = new BackgroundTask();
-            backgroundTask.start();
+            if (apodInformation.getMedia_typeInformation().equals("image")){
+                BackgroundTask backgroundTask = new BackgroundTask();
+                backgroundTask.start();
+            }else if (apodInformation.getMedia_typeInformation().equals("video")){
+                share();
+            }
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -221,8 +225,6 @@ public class MainActivity extends AppCompatActivity {
                 if (data.getMedia_typeInformation().equals("image")){
                     image.setVisibility(View.VISIBLE);
 
-                    // i use glide and picasso for double speed
-                    Glide.with(this).load(data.getUrlInformation()).thumbnail(0.005f).into(image);
                     Picasso.with(this).load(apodInformation.getUrlInformation()).error(R.drawable.ic_launcher_background).into(image);
                     webView.setVisibility(View.GONE);
                     webView.loadData("", "text/html", null);
@@ -278,6 +280,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void share()
     {
+        if (apodInformation.getMedia_typeInformation().equals("image")){
             // intent to share the image
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.putExtra(Intent.EXTRA_STREAM , uri);
@@ -285,6 +288,16 @@ public class MainActivity extends AppCompatActivity {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             startActivity(Intent.createChooser(intent , "Share image via"));
+        }else if (apodInformation.getMedia_typeInformation().equals("video")){
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, apodInformation.getUrlInformation());
+            sendIntent.setType("text/plain");
+
+            Intent shareIntent = Intent.createChooser(sendIntent, null);
+            startActivity(shareIntent);
+        }
+
     }
 
     @Override
